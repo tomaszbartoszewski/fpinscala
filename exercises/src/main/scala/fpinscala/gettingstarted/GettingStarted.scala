@@ -163,7 +163,7 @@ object PolymorphicFunctions {
 
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:
-
+  // partial1(1, (x:Int, y:Int) => x + y)
   def partial1[A,B,C](a: A, f: (A,B) => C): B => C =
     (b: B) => f(a, b)
 
@@ -171,8 +171,9 @@ object PolymorphicFunctions {
 
   // Note that `=>` associates to the right, so we could
   // write the return type as `A => B => C`
+  // curry((a: Int, b: Int) => a + b)
   def curry[A,B,C](f: (A, B) => C): A => (B => C) =
-    ???
+    (a: A) => ((b: B) => f(a, b))
 
   // NB: The `Function2` trait has a `curried` method already
 
