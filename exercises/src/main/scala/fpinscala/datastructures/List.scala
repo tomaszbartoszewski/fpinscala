@@ -98,6 +98,14 @@ object List { // `List` companion object. Contains functions for creating and wo
     }
   }
 
+  // dropWhile(List(1,3,5,7,9,11))(x => x < 6)
+  def dropWhile2[A](as: List[A])(f: A => Boolean): List[A] = {
+    as match {
+      case Cons(h, t) if f(h) => dropWhile2(t)(f)
+      case _ => as
+    }
+  }
+
   // init(List(1,2,3,4))
   def init[A](l: List[A]): List[A] = {
     l match {
