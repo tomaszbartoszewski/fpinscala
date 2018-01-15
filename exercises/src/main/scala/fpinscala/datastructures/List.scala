@@ -130,5 +130,14 @@ object List { // `List` companion object. Contains functions for creating and wo
     go(l, f, z)
   }
 
+  def sum_fl(ns: List[Int]) =
+    foldLeft(ns, 0)((x,y) => x + y)
+
+  def product_fl(ns: List[Double]) =
+    foldLeft(ns, 1.0)(_ * _)
+
+  def length_fl[A](l: List[A]): Int =
+    foldLeft(l, 0)((y, x) => y + 1)
+
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
