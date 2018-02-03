@@ -142,11 +142,19 @@ object List { // `List` companion object. Contains functions for creating and wo
   def reverse[A](l: List[A]): List[A] =
     foldRight(l, Nil: List[A])((x,y) => append(y, Cons(x, Nil)))
 
-  /*def foldLeft_fr[A,B](as: List[A], z: B)(f: (A, B) => B): B = 
+  // datastructures.List.foldLeft_fr(datastructures.List(1,2,3,4,5), 0)((x,y) => x + y)
+  def foldLeft_fr[A,B](as: List[A], z: B)(f: (A, B) => B): B =
     foldRight[A, B](as :List[A], z: B)((x: A, y: B) => f(x, y))
-*/
-  def foldRight_fl[A,B](as: List[A], z: B)(f: (A, B) => B): B = 
+
+  // datastructures.List.foldRight_fl(datastructures.List(1,2,3,4,5), 0)((x,y) => x + y)
+  def foldRight_fl[A,B](as: List[A], z: B)(f: (A, B) => B): B =
     foldLeft(as, z)((x, y) => f(y, x))
+
+  def reverse_fr_fl[A](l: List[A]): List[A] =
+    foldRight_fl(l, Nil: List[A])((x,y) => append(y, Cons(x, Nil)))
+
+  def reverse_fl_fr[A](l: List[A]): List[A] =
+    foldLeft_fr(l, Nil: List[A])((x,y) => Cons(x, y))
 
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
