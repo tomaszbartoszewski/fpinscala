@@ -165,5 +165,8 @@ object List { // `List` companion object. Contains functions for creating and wo
   def addOneToElements(list: List[Int]): List[Int] =
     foldRight(list, Nil: List[Int])((x, y) => Cons(x + 1, y))
 
+  def doubleToString(list: List[Double]): List[String] =
+    foldRight(list, Nil: List[String])((x, y) => Cons(x.toString, y))
+
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
