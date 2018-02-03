@@ -156,5 +156,8 @@ object List { // `List` companion object. Contains functions for creating and wo
   def reverse_fl_fr[A](l: List[A]): List[A] =
     foldLeft_fr(l, Nil: List[A])((x,y) => Cons(x, y))
 
+  def append_fr[A](a1: List[A], a2: List[A]): List[A] =
+    foldRight(a1, a2)((x, y) => Cons(x, y))
+
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
