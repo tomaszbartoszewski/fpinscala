@@ -177,4 +177,10 @@ object List { // `List` companion object. Contains functions for creating and wo
       case true => Cons(h, t)
       case false => t
     })
+
+  // datastructures.List.flatMap(datastructures.List(1,2,3,4,5,6,7,8,9))(i => datastructures.List(i, i))
+  def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] =
+    foldRight(l, Nil: List[B])((h: A, t: List[B]) =>
+      foldRight(f(h), t)((h2, t2) => Cons(h2, t2))
+    )
 }
