@@ -187,4 +187,16 @@ object List { // `List` companion object. Contains functions for creating and wo
   // datastructures.List.filterWithFlatMap(datastructures.List(1,2,3,4,5,6,7,8,9))(_ % 2 == 0)
   def filterWithFlatMap[A](l: List[A])(f: A => Boolean): List[A] =
     flatMap(l)((h) => if (f(h)) List(h) else Nil)
+
+  // datastructures.List.zipWithAdding(datastructures.List(1,2,3,4,5,6,7,8,9), datastructures.List(2,3,4,5,6,7,8))
+  def zipWithAdding(l1: List[Int], l2: List[Int]): List[Int] = {
+    l1 match {
+      case Nil => l2
+      case Cons(h, t) => l2 match {
+        case Nil => Cons(h, t)
+        case Cons(h2, t2) => Cons(h + h2, zipWithAdding(t, t2))
+      }
+    }
+  }
+
 }
