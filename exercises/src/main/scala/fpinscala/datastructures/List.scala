@@ -170,4 +170,11 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def map[A,B](l: List[A])(f: A => B): List[B] =
     foldRight(l, Nil: List[B])((h, t) => Cons(f(h), t))
+
+  // datastructures.List.filter(datastructures.List(1,2,3,4,5,6,7,8,9))(_ % 2 == 0)
+  def filter[A](l: List[A])(f: A => Boolean): List[A] =
+    foldRight(l, Nil: List[A])((h, t) => f(h) match {
+      case true => Cons(h, t)
+      case false => t
+    })
 }
