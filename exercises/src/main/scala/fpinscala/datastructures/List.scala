@@ -183,4 +183,8 @@ object List { // `List` companion object. Contains functions for creating and wo
     foldRight(l, Nil: List[B])((h: A, t: List[B]) =>
       foldRight(f(h), t)((h2, t2) => Cons(h2, t2))
     )
+
+  // datastructures.List.filterWithFlatMap(datastructures.List(1,2,3,4,5,6,7,8,9))(_ % 2 == 0)
+  def filterWithFlatMap[A](l: List[A])(f: A => Boolean): List[A] =
+    flatMap(l)((h) => if (f(h)) List(h) else Nil)
 }
