@@ -199,4 +199,11 @@ object List { // `List` companion object. Contains functions for creating and wo
     }
   }
 
+  // datastructures.List.zipWith(datastructures.List(1,2,3), datastructures.List(2,3,4,5,6,7,8))(_ + _)
+  def zipWith[A](l1: List[A], l2: List[A])(f: (A, A) => A): List[A] = (l1, l2) match {
+    case (Nil, _) => Nil
+    case (_, Nil) => Nil
+    case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), zipWith(t1, t2)(f))
+  }
+
 }
