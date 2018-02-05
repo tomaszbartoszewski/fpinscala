@@ -18,4 +18,9 @@ object Tree {
     case Branch(l, r) => maximum(l) max maximum(r)
   }
 
+  // datastructures.Tree.depth(datastructures.Branch(datastructures.Branch(datastructures.Leaf(4), datastructures.Leaf(6)), datastructures.Leaf(3)))
+  def depth[A](t: Tree[A]): Int = t match {
+    case Leaf(_) => 1
+    case Branch(l, r) => 1 + (depth(l) max depth(r))
+  }
 }
