@@ -12,6 +12,10 @@ object Tree {
     case Branch(l, r) => size(l) + size(r) + 1
   }
 
-
+  // datastructures.Tree.maximum(datastructures.Branch(datastructures.Branch(datastructures.Leaf(4), datastructures.Leaf(6)), datastructures.Leaf(3)))
+  def maximum(t: Tree[Int]): Int = t match {
+    case Leaf(x) => x
+    case Branch(l, r) => maximum(l) max maximum(r)
+  }
 
 }
