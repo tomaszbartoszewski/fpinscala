@@ -23,4 +23,10 @@ object Tree {
     case Leaf(_) => 1
     case Branch(l, r) => 1 + (depth(l) max depth(r))
   }
+
+  // datastructures.Tree.map(datastructures.Branch(datastructures.Branch(datastructures.Leaf(4), datastructures.Leaf(6)), datastructures.Leaf(3)))(_ * 2)
+  def map[A, B](t: Tree[A])(f: A => B): Tree[B] = t match {
+    case Leaf(x) => Leaf(f(x))
+    case Branch(l, r) => Branch(map(l)(f), map(r)(f))
+  }
 }
