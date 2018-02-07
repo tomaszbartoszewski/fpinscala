@@ -11,7 +11,12 @@ sealed trait Option[+A] {
     case Some(a) => Some(f(a))
   }
 
-  def getOrElse[B>:A](default: => B): B = ???
+  // (fpinscala.errorhandling.None: fpinscala.errorhandling.Option[Int]).getOrElse(-1)
+  // fpinscala.errorhandling.Some(5).getOrElse(-1)
+  def getOrElse[B>:A](default: => B): B = this match {
+    case None => default
+    case Some(a) => a
+  }
 
   def flatMap[B](f: A => Option[B]): Option[B] = ???
 
