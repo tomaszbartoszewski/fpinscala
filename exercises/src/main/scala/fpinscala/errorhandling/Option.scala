@@ -4,7 +4,12 @@ package fpinscala.errorhandling
 import scala.{Option => _, Some => _, Either => _, _} // hide std library `Option`, `Some` and `Either`, since we are writing our own in this chapter
 
 sealed trait Option[+A] {
-  def map[B](f: A => B): Option[B] = ???
+  // (fpinscala.errorhandling.None: fpinscala.errorhandling.Option[Int]).map(_ * 2)
+  // fpinscala.errorhandling.Some(5).map(_ * 2)
+  def map[B](f: A => B): Option[B] = this match {
+    case None => None
+    case Some(a) => Some(f(a))
+  }
 
   def getOrElse[B>:A](default: => B): B = ???
 
