@@ -32,7 +32,12 @@ sealed trait Option[+A] {
   def orElse[B>:A](ob: => Option[B]): Option[B] =
     map (Some(_)) getOrElse(ob)
 
-  def filter(f: A => Boolean): Option[A] = ???
+  // (fpinscala.errorhandling.None: fpinscala.errorhandling.Option[Int]).filter(a => a == 5)
+  // fpinscala.errorhandling.Some(5).filter(a => a == 5)
+  // fpinscala.errorhandling.Some(10).filter(a => a == 5)
+  def filter(f: A => Boolean): Option[A] =
+    map (a => if (f(a)) Some(a) else None) getOrElse(None)
+
 }
 case class Some[+A](get: A) extends Option[A]
 case object None extends Option[Nothing]
