@@ -25,7 +25,12 @@ sealed trait Option[+A] {
   def flatMap[B](f: A => Option[B]): Option[B] =
     map(f) getOrElse(None)
 
-  def orElse[B>:A](ob: => Option[B]): Option[B] = ???
+  // (fpinscala.errorhandling.None: fpinscala.errorhandling.Option[Int]).orElse(fpinscala.errorhandling.Some(15))
+  // (fpinscala.errorhandling.None: fpinscala.errorhandling.Option[Int]).orElse(fpinscala.errorhandling.None: fpinscala.errorhandling.Option[Int])
+  // fpinscala.errorhandling.Some(5).orElse(fpinscala.errorhandling.Some(15))
+  // fpinscala.errorhandling.Some(5).orElse(fpinscala.errorhandling.None: fpinscala.errorhandling.Option[Int])
+  def orElse[B>:A](ob: => Option[B]): Option[B] =
+    map (Some(_)) getOrElse(ob)
 
   def filter(f: A => Boolean): Option[A] = ???
 }
