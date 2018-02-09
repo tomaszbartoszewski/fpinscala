@@ -63,7 +63,12 @@ object Option {
   def mean(xs: Seq[Double]): Option[Double] =
     if (xs.isEmpty) None
     else Some(xs.sum / xs.length)
-  def variance(xs: Seq[Double]): Option[Double] = ???
+
+  // fpinscala.errorhandling.Option.variance(Seq())
+  // fpinscala.errorhandling.Option.variance(Seq(1,2,3,4,5))
+  // fpinscala.errorhandling.Option.variance(Seq(2,2,2,2))
+  def variance(xs: Seq[Double]): Option[Double] =
+    mean(xs) flatMap(m => mean(xs.map(x => math.pow(x - m, 2))))
 
   def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = ???
 
