@@ -70,7 +70,35 @@ object Option {
   def variance(xs: Seq[Double]): Option[Double] =
     mean(xs) flatMap(m => mean(xs.map(x => math.pow(x - m, 2))))
 
-  def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = ???
+  def lift[A, B](f: A => B): Option[A] => Option[B] =
+    _ map f
+
+  // fpinscala.errorhandling.Option.abs0(fpinscala.errorhandling.Some(-12.98))
+  // fpinscala.errorhandling.Option.abs0(fpinscala.errorhandling.None)
+  val abs0: Option[Double] => Option[Double] =
+    lift(math.abs)
+
+  def insuranceRateQuote(age: Int, numberOfSpeedingTickets: Int): Double =
+    math.abs(45 - age) + numberOfSpeedingTickets
+
+  // fpinscala.errorhandling.Option.parseInsuranceRateQuote("", "")
+  // fpinscala.errorhandling.Option.parseInsuranceRateQuote("25", "12")
+  def parseInsuranceRateQuote(age: String, numberOfSpeedingTickets: String): Option[Double] = {
+    val optAge: Option[Int] = Try(age.toInt)
+    val optTickets: Option[Int] = Try(numberOfSpeedingTickets.toInt)
+    map2(optAge, optTickets)(insuranceRateQuote)
+  }
+
+  def Try[A](a: => A): Option[A] =
+    try Some(a)
+    catch { case e: Exception => None }
+
+  def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = (a, b) match {
+    case (None, _) => None
+    case (_, None) => None
+    case (Some(av), Some(bv)) => Some(f(av, bv))
+  }
+
 
   def sequence[A](a: List[Option[A]]): Option[List[A]] = ???
 
