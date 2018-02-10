@@ -111,5 +111,16 @@ object Option {
 
   }
 
-  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = ???
+  // Option.traverse(List("2", "3", "4", "5"))(i => Option.Try(i.toInt))
+  // Option.traverse(List("2", "3", "4", "5", "wrong"))(i => Option.Try(i.toInt))
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+    a match {
+      case Nil => Some(Nil)
+      case h :: t => map2(f(h), traverse(t)(f))(_ :: _)
+    }
+
+  // Option.sequence_traverse(List(Some(5), Some(4), Some(9), None, Some(8)))
+  // Option.sequence_traverse(List(Some(5), Some(4), Some(9), Some(8)))
+  def sequence_traverse[A](a: List[Option[A]]): Option[List[A]] =
+    traverse(a)(x => x)
 }
