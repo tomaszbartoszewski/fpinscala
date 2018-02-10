@@ -100,7 +100,16 @@ object Option {
   }
 
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = ???
+  // import fpinscala.errorhandling._
+  // Option.sequence(List(Some(5), Some(4), Some(9)))
+  // Option.sequence(List(Some(5), Some(4), Some(9), None, Some(8)))
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = {
+    a match {
+      case Nil => Some(Nil)
+      case h :: t => map2(h, sequence(t))(_ :: _)
+    }
+
+  }
 
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = ???
 }
