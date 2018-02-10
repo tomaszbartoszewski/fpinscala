@@ -123,4 +123,13 @@ object Option {
   // Option.sequence_traverse(List(Some(5), Some(4), Some(9), Some(8)))
   def sequence_traverse[A](a: List[Option[A]]): Option[List[A]] =
     traverse(a)(x => x)
+
+  // Option.map2_for(Some(5), Some(6))(_ * _)
+  // Option.map2_for(Some(5), None: Option[Int])(_ * _)
+  // Option.map2_for(None: Option[Int], Some(3))(_ * _)
+  def map2_for[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
+    for {
+      aa <- a
+      bb <- b
+    } yield f(aa, bb)
 }
