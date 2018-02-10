@@ -56,4 +56,15 @@ object Either {
     try Right(a)
     catch { case e: Exception => Left(e) }
 
+  def insuranceRateQuote(age: Int, numberOfSpeedingTickets: Int): Double =
+    math.abs(45 - age) + numberOfSpeedingTickets
+
+  // Either.parseInsuranceRateQuote("", "")
+  // Either.parseInsuranceRateQuote("25", "12")
+  def parseInsuranceRateQuote(age: String, numberOfSpeedingTickets: String): Either[Exception, Double] =
+    for {
+      a <- Try(age.toInt)
+      tickets <- Try(numberOfSpeedingTickets.toInt)
+    } yield insuranceRateQuote(a, tickets)
+
 }
