@@ -17,9 +17,13 @@ trait Stream[+A] {
     case Empty => None
     case Cons(h, t) => if (f(h())) Some(h()) else t().find(f)
   }
-  def take(n: Int): Stream[A] = ???
 
-  def drop(n: Int): Stream[A] = ???
+  def toList: List[A] = this match {
+    case Empty => Nil
+    case Cons(h, t) => h() :: t().toList
+  }
+
+  def toList2: List[A] = foldRight(Nil: List[A])(_ :: _)
 
   def takeWhile(p: A => Boolean): Stream[A] = ???
 
