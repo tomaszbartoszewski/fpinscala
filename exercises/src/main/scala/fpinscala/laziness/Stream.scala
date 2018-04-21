@@ -57,6 +57,10 @@ trait Stream[+A] {
     case _ => { println("true"); true }
   }
 
+  // Stream(1,2,3,4,5,6,7,8,9).takeWhile_foldRight(_ < 5).toList
+  def takeWhile_foldRight(p: A => Boolean): Stream[A] =
+    foldRight[Stream[A]](Empty)((a, b) => if (p(a)) Cons(() => a, () => b) else b)
+
   def headOption: Option[A] = ???
 
   // 5.7 map, filter, append, flatmap using foldRight. Part of the exercise is
