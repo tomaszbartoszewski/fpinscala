@@ -50,7 +50,12 @@ trait Stream[+A] {
     case _ => Empty
   }
 
-  def forAll(p: A => Boolean): Boolean = ???
+  // Stream(1,2,3,4,5,6,7,8,9).forAll(_ > 0)
+  def forAll(p: A => Boolean): Boolean = this match {
+    case Cons(h, t) if (!p(h())) => { println("false"); false }
+    case Cons(_, t) => { println("Check tail"); t() forAll(p) }
+    case _ => { println("true"); true }
+  }
 
   def headOption: Option[A] = ???
 
