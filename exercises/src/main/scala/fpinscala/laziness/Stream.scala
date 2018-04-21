@@ -25,6 +25,23 @@ trait Stream[+A] {
 
   def toList2: List[A] = foldRight(Nil: List[A])(_ :: _)
 
+  def take(n: Int): Stream[A] = {
+    def go(i: Int, s: Stream[A]): Stream[A] = i match {
+      case 0 => Empty
+      case _ => s match {
+        case Empty => Empty
+        case Cons(h, t) => Cons(h, () => go(i-1, t()))
+      }
+    }
+
+    go(n, this)
+  }
+
+  def drop(n: Int): Stream[A] = this match {
+    case Cons(_, t) if n > 0 => t() drop(n-1)
+    case _ => this
+  }
+
   def takeWhile(p: A => Boolean): Stream[A] = ???
 
   def forAll(p: A => Boolean): Boolean = ???
