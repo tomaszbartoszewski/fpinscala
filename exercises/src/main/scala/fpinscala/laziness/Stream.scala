@@ -61,7 +61,10 @@ trait Stream[+A] {
   def takeWhile_foldRight(p: A => Boolean): Stream[A] =
     foldRight[Stream[A]](Empty)((a, b) => if (p(a)) Cons(() => a, () => b) else b)
 
-  def headOption: Option[A] = ???
+  // Stream(7,8,9).headOption
+  // Stream().headOption
+  def headOption: Option[A] = 
+    foldRight[Option[A]](None)((a, _) => Some(a))
 
   // 5.7 map, filter, append, flatmap using foldRight. Part of the exercise is
   // writing your own function signatures.
