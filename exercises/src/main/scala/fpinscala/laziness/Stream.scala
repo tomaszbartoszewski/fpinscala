@@ -25,7 +25,7 @@ trait Stream[+A] {
 
   def toList2: List[A] = foldRight(Nil: List[A])(_ :: _)
 
-  // Stream(1,2,3,4,5,6,7,8,9).take(5).toList2
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).take(5).toList2
   def take(n: Int): Stream[A] = {
     def go(i: Int, s: Stream[A]): Stream[A] = i match {
       case 0 => Empty
@@ -38,36 +38,52 @@ trait Stream[+A] {
     go(n, this)
   }
 
-  // Stream(1,2,3,4,5,6,7,8,9).drop(5).toList
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).drop(5).toList
   def drop(n: Int): Stream[A] = this match {
     case Cons(_, t) if n > 0 => t() drop(n-1)
     case _ => this
   }
 
-  // Stream(1,2,3,4,5,6,7,8,9).takeWhile(_ < 5).toList
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).takeWhile(_ < 5).toList
   def takeWhile(p: A => Boolean): Stream[A] = this match {
     case Cons(h, t) if (p(h())) => Cons(h, () => t().takeWhile(p))
     case _ => Empty
   }
 
-  // Stream(1,2,3,4,5,6,7,8,9).forAll(_ > 0)
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).forAll(_ > 0)
   def forAll(p: A => Boolean): Boolean = this match {
     case Cons(h, t) if (!p(h())) => { println("false"); false }
     case Cons(_, t) => { println("Check tail"); t() forAll(p) }
     case _ => { println("true"); true }
   }
 
-  // Stream(1,2,3,4,5,6,7,8,9).takeWhile_foldRight(_ < 5).toList
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).takeWhile_foldRight(_ < 5).toList
   def takeWhile_foldRight(p: A => Boolean): Stream[A] =
     foldRight[Stream[A]](Empty)((a, b) => if (p(a)) Cons(() => a, () => b) else b)
 
-  // Stream(7,8,9).headOption
-  // Stream().headOption
+  // fpinscala.laziness.Stream(7,8,9).headOption
+  // fpinscala.laziness.Stream().headOption
   def headOption: Option[A] = 
     foldRight[Option[A]](None)((a, _) => Some(a))
 
   // 5.7 map, filter, append, flatmap using foldRight. Part of the exercise is
   // writing your own function signatures.
+
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).map(_ + 1)
+  def map[B](f: A => B): Stream[B] =
+    foldRight(empty[B])((a, b) => cons(f(a), b))
+
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).filter(_ % 2 == 0)
+  def filter(p: A => Boolean): Stream[A] =
+    foldRight(empty[A])((a, b) => if(p(a)) cons(a, b) else b)
+
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).append(Stream(10,11,12))
+  def append[B>:A](s: Stream[B]): Stream[B] =
+    foldRight(s)(cons(_, _))
+
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).flatmap(i => fpinscala.laziness.Stream(i,i,i))
+  def flatmap[B](f: A => Stream[B]): Stream[B] =
+    foldRight(empty[B])((a, b) => f(a).append(b))
 
   def startsWith[B](s: Stream[B]): Boolean = ???
 }
