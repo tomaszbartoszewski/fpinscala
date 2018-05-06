@@ -103,6 +103,12 @@ object Stream {
     if (as.isEmpty) empty 
     else cons(as.head, apply(as.tail: _*))
 
+  // fpinscala.laziness.Stream.constant(5).take(6).toList
+  def constant[A](a: A): Stream[A] = {
+    lazy val tail: Stream[A] = Cons(() => a, () => tail)
+    tail
+  }
+
   val ones: Stream[Int] = Stream.cons(1, ones)
   def from(n: Int): Stream[Int] = ???
 
