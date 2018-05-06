@@ -115,5 +115,13 @@ object Stream {
   def from(n: Int): Stream[Int] =
     cons(n, from(n + 1))
 
+  // fpinscala.laziness.Stream.fibs().take(7).toList
+  def fibs(): Stream[Int] = {
+    def go(i: Int, j: Int): Stream[Int] =
+      cons(i, go(j, i + j))
+
+    go(0, 1)
+  }
+
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = ???
 }
