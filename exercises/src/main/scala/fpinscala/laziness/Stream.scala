@@ -123,5 +123,13 @@ object Stream {
     go(0, 1)
   }
 
-  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = ???
+  // fpinscala.laziness.Stream.unfold(5)(x => Some((x, x+1))).take(6).toList
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = {
+    def go(s: S): Stream[A] = f(s) match {
+      case None => empty
+      case Some((a, b)) => cons(a, go(b))
+    }
+
+    go(z)
+  }
 }
