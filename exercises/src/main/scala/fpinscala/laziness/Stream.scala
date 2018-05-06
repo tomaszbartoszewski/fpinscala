@@ -110,7 +110,10 @@ object Stream {
   }
 
   val ones: Stream[Int] = Stream.cons(1, ones)
-  def from(n: Int): Stream[Int] = ???
+
+  // fpinscala.laziness.Stream.from(6).take(5).toList
+  def from(n: Int): Stream[Int] =
+    cons(n, from(n + 1))
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = ???
 }
