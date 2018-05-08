@@ -132,4 +132,20 @@ object Stream {
 
     go(z)
   }
+
+  // fpinscala.laziness.Stream.fibs_unfold().take(7).toList
+  def fibs_unfold(): Stream[Int] =
+    unfold((0, 1))({ case (a, b) => Some((a, (b, a + b))) })
+
+  // fpinscala.laziness.Stream.from_unfold(1).take(7).toList
+  def from_unfold(n: Int): Stream[Int] =
+    unfold(n)(x => Some((x, x + 1)))
+
+  // fpinscala.laziness.Stream.constant_unfold(4).take(7).toList
+  def constant_unfold[A](a: A): Stream[A] =
+    unfold(a)(_ => Some((a, a)))
+
+  // fpinscala.laziness.Stream.ones_unfold.take(7).toList
+  val ones_unfold: Stream[Int] =
+    unfold(1)(_ => Some((1,1)))
 }
