@@ -85,6 +85,45 @@ trait Stream[+A] {
   def flatmap[B](f: A => Stream[B]): Stream[B] =
     foldRight(empty[B])((a, b) => f(a).append(b))
 
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).map_unfold(_ + 1).toList
+  def map_unfold[B](f: A => B): Stream[B] =
+    unfold(this) {
+      case Cons(h, t) => Some(f(h()), t())
+      case _ => None
+    }
+
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).take_unfold(5).toList
+  def take_unfold(n: Int): Stream[A] =
+    unfold((this, n)) {
+      case (Cons(h, t), 1) => Some(h(), (empty, 1))
+      case (Cons(h, t), i) => Some(h(),(t(), i - 1))
+      case _ => None
+    }
+
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).takeWhile_unfold(_ < 5).toList
+  def takeWhile_unfold(f: A => Boolean): Stream[A] =
+    unfold(this) {
+      case Cons(h, t) if f(h()) => Some(h(), t())
+      case _ => None
+    }
+
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).zipWith_unfold(fpinscala.laziness.Stream(10, 20, 30, 40))(_ * _)
+  def zipWith_unfold[B, C](s: Stream[B])(f: (A, B) => C): Stream[C] =
+    unfold((this, s)) {
+      case (Cons(h1, t1), Cons(h2, t2)) => Some(f(h1(), h2()), (t1(), t2()))
+      case _ => None
+    }
+
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).zipAll_unfold(fpinscala.laziness.Stream(10, 20, 30, 40)).toList
+  // fpinscala.laziness.Stream(1,2,3).zipAll_unfold(fpinscala.laziness.Stream(10, 20, 30, 40)).toList
+  def zipAll_unfold[B](s2: Stream[B]): Stream[(Option[A], Option[B])] =
+    unfold((this, s2)) {
+      case (Cons(h1, t1), Cons(h2, t2)) => Some((Some(h1()), Some(h2())), (t1(), t2()))
+      case (Cons(h1, t1), _) => Some((Some(h1()), None), (t1(), empty))
+      case (_, Cons(h2, t2)) => Some((None, Some(h2())), (empty, t2()))
+      case _ => None
+    }
+
   def startsWith[B](s: Stream[B]): Boolean = ???
 }
 case object Empty extends Stream[Nothing]
