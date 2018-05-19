@@ -133,6 +133,17 @@ trait Stream[+A] {
       case _ => false
     }).forAll { case (h1, h2) => h1 == h2 }
 
+  // fpinscala.laziness.Stream(1,2,3).tails.map(t => t.toList).toList
+  def tails: Stream[Stream[A]] =
+    unfold[Stream[A], Stream[A]](this) {
+      case Cons(h, t) => Some((Cons(h, t), t()))
+      case _ => None
+    } append Stream(empty)
+
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).hasSubsequence(fpinscala.laziness.Stream(3, 4, 5, 6))
+  def hasSubsequence[A](s: Stream[A]): Boolean =
+    tails exists (_ startsWith s)
+
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
