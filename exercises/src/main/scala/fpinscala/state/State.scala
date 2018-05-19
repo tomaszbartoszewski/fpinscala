@@ -85,7 +85,23 @@ object RNG {
   def double_rand: Rand[Double] =
     map(nonNegativeInt)(i => i / (Int.MaxValue.toDouble + 1))
 
-  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = ???
+  def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] =
+    rng => {
+      val (a, rnga) = ra(rng)
+      val (b, rngb) = rb(rnga)
+      (f(a, b), rngb)
+    }
+
+  def both[A, B](ra: Rand[A], rb: Rand[B]): Rand[(A, B)] =
+    map2(ra, rb)((_, _))
+
+  // fpinscala.state.RNG.randIntDouble(rnd)
+  def randIntDouble: Rand[(Int, Double)] =
+    both(int, double)
+
+  // fpinscala.state.RNG.randDoubleInt(rnd)
+  def randDoubleInt: Rand[(Double, Int)] =
+    both(double, int)
 
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = ???
 
