@@ -66,7 +66,17 @@ object RNG {
     ((d1, d2, d3), rng4)
   }
 
-  def ints(count: Int)(rng: RNG): (List[Int], RNG) = ???
+  // fpinscala.state.RNG.ints(5)(rnd)
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    count match {
+      case 0 => (Nil: List[Int], rng)
+      case c => {
+        val (i, rng2) = rng.nextInt
+        val (l, rng3) = ints(c - 1)(rng2)
+        (i :: l, rng3)
+      }
+    }
+  }
 
   def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = ???
 
