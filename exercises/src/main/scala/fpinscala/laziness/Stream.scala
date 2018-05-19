@@ -144,6 +144,14 @@ trait Stream[+A] {
   def hasSubsequence[A](s: Stream[A]): Boolean =
     tails exists (_ startsWith s)
 
+  // fpinscala.laziness.Stream(1,2,3).scanRight(0)(_ + _).toList
+  // fpinscala.laziness.Stream(1,2,3).scanRight(fpinscala.laziness.Stream.empty[Int])((a, b) => fpinscala.laziness.Stream.cons(a, b)).map(t => t.toList).toList
+  def scanRight[B](z: B)(f: (A, => B) => B): Stream[B] =
+    foldRight((z, Stream(z)))((h, s) => {
+      val (agg1, agg2) = s
+      val newAgg1 = f(h, agg1)
+      (newAgg1, cons(newAgg1, agg2))
+    })._2
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
