@@ -44,11 +44,27 @@ object RNG {
     (v / (Int.MaxValue.toDouble + 1), r)
   }
 
-  def intDouble(rng: RNG): ((Int,Double), RNG) = ???
+  // fpinscala.state.RNG.intDouble(rnd)
+  def intDouble(rng: RNG): ((Int,Double), RNG) = {
+    val (i, rng2) = rng.nextInt
+    val (d, rng3) = double(rng2)
+    ((i, d), rng3)
+  }
 
-  def doubleInt(rng: RNG): ((Double,Int), RNG) = ???
+  // fpinscala.state.RNG.doubleInt(rnd)
+  def doubleInt(rng: RNG): ((Double,Int), RNG) = {
+    val (d, rng2) = double(rng)
+    val (i, rng3) = rng2.nextInt
+    ((d, i), rng3)
+  }
 
-  def double3(rng: RNG): ((Double,Double,Double), RNG) = ???
+  // fpinscala.state.RNG.double3(rnd)
+  def double3(rng: RNG): ((Double,Double,Double), RNG) = {
+    val (d1, rng2) = double(rng)
+    val (d2, rng3) = double(rng2)
+    val (d3, rng4) = double(rng3)
+    ((d1, d2, d3), rng4)
+  }
 
   def ints(count: Int)(rng: RNG): (List[Int], RNG) = ???
 
