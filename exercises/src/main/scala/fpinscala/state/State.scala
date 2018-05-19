@@ -30,12 +30,19 @@ object RNG {
       (f(a), rng2)
     }
 
+  // val rnd = fpinscala.state.RNG.Simple(12)
+  // fpinscala.state.RNG.nonNegativeInt(rnd)
   def nonNegativeInt(rng: RNG): (Int, RNG) = {
     val (v, r) = rng.nextInt
     (if (v < 0) v + 1 + Int.MaxValue else v, r)
   }
 
-  def double(rng: RNG): (Double, RNG) = ???
+  // val rnd = fpinscala.state.RNG.Simple(12)
+  // fpinscala.state.RNG.double(rnd)
+  def double(rng: RNG): (Double, RNG) = {
+    val (v, r) = nonNegativeInt(rng)
+    (v / (Int.MaxValue.toDouble + 1), r)
+  }
 
   def intDouble(rng: RNG): ((Int,Double), RNG) = ???
 
