@@ -124,7 +124,15 @@ trait Stream[+A] {
       case _ => None
     }
 
-  def startsWith[B](s: Stream[B]): Boolean = ???
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).startsWith(fpinscala.laziness.Stream(1, 2, 3, 4))
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).startsWith(fpinscala.laziness.Stream(1, 2, 3, 5))
+  // fpinscala.laziness.Stream(1,2,3,4,5,6,7,8,9).startsWith(fpinscala.laziness.Stream(1, 2, 2, 4))
+  def startsWith[B](s: Stream[B]): Boolean =
+    zipAll_unfold(s).takeWhile_unfold(t => t match {
+      case (_, Some(_)) => true
+      case _ => false
+    }).forAll { case (h1, h2) => h1 == h2 }
+
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
